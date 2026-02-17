@@ -1,0 +1,29 @@
+Machine learning is a subset of artificial intelligence that enables systems to learn from data.
+
+Deep learning is a type of machine learning that uses neural networks with many layers.
+
+Natural language processing allows computers to understand human language.
+
+Python is widely used for artificial intelligence and data science.
+
+Data science involves extracting insights from structured and unstructured data.
+
+Computer vision enables machines to interpret visual information from images.
+
+Reinforcement learning trains agents to make decisions through rewards and penalties.
+
+Artificial intelligence is transforming healthcare, finance, and education.
+
+Climate change is causing rising global temperatures and environmental disruptions.
+
+Renewable energy sources such as solar and wind help reduce carbon emissions.
+
+Blockchain technology enables secure decentralized transactions.
+
+Cybersecurity protects systems and networks from digital attacks.
+
+Cloud computing allows scalable computing resources over the internet.
+
+Big data analytics helps organizations make data-driven decisions.
+
+Robotics integrates mechanical engineering with artificial intelligence.
