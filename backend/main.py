@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from search import search
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import UploadFile, File
+import shutil
+from pdf_loader import extract_text_from_pdf
 
 app = FastAPI()
 
@@ -25,3 +28,14 @@ def semantic_search(query: str):
         "query": query,
         "results": results
     }
+
+@app.post("/upload")
+async def upload_pdf(file: UploadFile = File(...)):
+    file_location = f"backend/documents/{file.filename}"
+
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    text = extract_text_from_pdf(file_location)
+
+    return {"message": "File uploaded successfully", "length": len(text)}
