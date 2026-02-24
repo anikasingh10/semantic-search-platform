@@ -47,6 +47,31 @@ def search(query, k=3):
 
     distances, indices = index.search(query_vector, k)
 
-    results = [documents[i] for i in indices[0]]
+    results = [document_chunks[i] for i in indices[0]]
 
     return results
+
+def chunk_text(text, chunk_size=200):
+    words = text.split()
+
+    chunks = []
+
+    for i in range(0, len(words), chunk_size):
+        chunk = " ".join(words[i:i+chunk_size])
+        chunks.append(chunk)
+
+    return chunks
+
+document_chunks = []
+
+def index_document(text):
+    chunks = chunk_text(text)
+
+    for chunk in chunks:
+        embedding = create_embedding(chunk)
+
+        vector = np.array([embedding]).astype("float32")
+
+        index.add(vector)
+
+        document_chunks.append(chunk)
