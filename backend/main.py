@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from search import search
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile, File
 import shutil
 from pdf_loader import extract_text_from_pdf
+from search import search
+from search import index_document
 
 app = FastAPI()
 
@@ -38,4 +39,6 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     text = extract_text_from_pdf(file_location)
 
-    return {"message": "File uploaded successfully", "length": len(text)}
+    index_document(text)
+
+    return {"message": "Document indexed successfully"}
