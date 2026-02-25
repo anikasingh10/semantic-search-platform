@@ -19,10 +19,16 @@ def load_documents():
 
     return documents
 
+
 documents = load_documents()
 
-# convert documents into embeddings
-embeddings = [create_embedding(doc) for doc in documents]
+document_chunks = []
+
+embeddings = []
+
+for doc in documents:
+    document_chunks.append(doc)
+    embeddings.append(create_embedding(doc))
 
 # convert to numpy array
 embedding_matrix = np.array(embeddings).astype("float32")
@@ -51,18 +57,18 @@ def search(query, k=3):
 
     return results
 
+
 def chunk_text(text, chunk_size=200):
     words = text.split()
 
     chunks = []
 
     for i in range(0, len(words), chunk_size):
-        chunk = " ".join(words[i:i+chunk_size])
+        chunk = " ".join(words[i:i + chunk_size])
         chunks.append(chunk)
 
     return chunks
 
-document_chunks = []
 
 def index_document(text):
     chunks = chunk_text(text)
