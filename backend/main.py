@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile, File
+import os
 import shutil
 from pdf_loader import extract_text_from_pdf
 from search import search
@@ -32,7 +33,11 @@ def semantic_search(query: str):
 
 @app.post("/upload")
 async def upload_pdf(file: UploadFile = File(...)):
-    file_location = f"backend/documents/{file.filename}"
+    # store uploads relative to this module so it works regardless of the current working directory.
+    documents_dir = os.path.join(os.path.dirname(__file__), "documents")
+    os.makedirs(documents_dir, exist_ok=True)
+
+    file_location = os.path.join(documents_dir, file.filename)
 
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
