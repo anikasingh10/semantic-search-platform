@@ -1,21 +1,21 @@
 import os
+import re
 import numpy as np
 import faiss
 
 from embedder import create_embedding
+from pdf_loader import clean_text
 
 
 def load_documents():
-    """
-    Load documents from the dataset file
-    """
+    """Load documents from the dataset file."""
     file_path = os.path.join("documents", "data.txt")
 
     with open(file_path, "r") as f:
         lines = f.readlines()
 
     # clean and remove empty lines
-    documents = [line.strip() for line in lines if line.strip()]
+    documents = [clean_text(line) for line in lines if line.strip()]
 
     return documents
 
@@ -58,14 +58,48 @@ def search(query, k=3):
     return results
 
 
-def chunk_text(text, chunk_size=200):
-    words = text.split()
+def chunk_text(text: str, max_words: int = 250):
+    """Split text into readable chunks based on sentence boundaries."""
+
+    text = clean_text(text)
+
+    # Split by sentence boundaries (keep punctuation attached to the sentence).
+    sentences = re.split(r"(?<=[\.\?!])\s+", text)
 
     chunks = []
+    current_chunk: list[str] = []
+    current_word_count = 0
 
-    for i in range(0, len(words), chunk_size):
-        chunk = " ".join(words[i:i + chunk_size])
-        chunks.append(chunk)
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+
+        words = sentence.split()
+        if not words:
+            continue
+
+        # If a single sentence is very long, split it by word count.
+        if len(words) >= max_words:
+            if current_chunk:
+                chunks.append(" ".join(current_chunk).strip())
+                current_chunk = []
+                current_word_count = 0
+
+            for i in range(0, len(words), max_words):
+                chunks.append(" ".join(words[i : i + max_words]).strip())
+            continue
+
+        if current_word_count + len(words) > max_words and current_chunk:
+            chunks.append(" ".join(current_chunk).strip())
+            current_chunk = []
+            current_word_count = 0
+
+        current_chunk.append(sentence)
+        current_word_count += len(words)
+
+    if current_chunk:
+        chunks.append(" ".join(current_chunk).strip())
 
     return chunks
 
