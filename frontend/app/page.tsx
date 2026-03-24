@@ -11,6 +11,29 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
+  const validatePDFFile = (file: File): string | null => {
+    // Check if file exists
+    if (!file) return "No file selected";
+
+    // Check file size (limit to 50MB)
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > maxSize) return "File size must be less than 50MB";
+
+    // Check MIME type
+    const allowedTypes = ["application/pdf"];
+    if (!allowedTypes.includes(file.type)) {
+      return "Please select a valid PDF file";
+    }
+
+    // Check file extension
+    const fileName = file.name.toLowerCase();
+    if (!fileName.endsWith(".pdf")) {
+      return "File must have a .pdf extension";
+    }
+
+    return null; // Valid file
+  };
+
   const handleSearch = async () => {
     if (!query) return;
 
@@ -31,11 +54,19 @@ export default function Home() {
   const handleUpload = async () => {
     if (!file) return;
 
+    // Validate PDF file
+    const validationError = validatePDFFile(file);
+    if (validationError) {
+      setUploadStatus(validationError);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       setIsUploading(true);
+      setUploadStatus(""); // Clear any previous status
 
       const res = await fetch("http://127.0.0.1:8000/upload", {
         method: "POST",
@@ -44,7 +75,11 @@ export default function Home() {
 
       const data = await res.json();
 
-      setUploadStatus(data.message || "Upload successful");
+      if (!res.ok) {
+        setUploadStatus(data.error || "Upload failed");
+      } else {
+        setUploadStatus(data.message || "Upload successful");
+      }
     } catch (error) {
       console.error("Upload failed:", error);
       setUploadStatus("Upload failed");
