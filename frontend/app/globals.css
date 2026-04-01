@@ -1,44 +1,44 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 222 30% 8%;
+  --foreground: 210 40% 98%;
+  --card: 224 27% 11%;
+  --card-foreground: 210 35% 96%;
+  --border: 218 22% 23%;
+  --input: 218 22% 23%;
+  --primary: 186 95% 42%;
+  --primary-foreground: 220 15% 10%;
+  --muted: 220 18% 16%;
+  --muted-foreground: 215 20% 70%;
+  --accent: 197 86% 57%;
+  --accent-foreground: 220 20% 10%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  @apply border-border;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  @apply h-full;
 }
 
 body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top, rgba(99, 102, 241, 0.25), transparent 55%),
-    radial-gradient(circle at bottom, rgba(236, 72, 153, 0.2), transparent 55%),
-    var(--background);
-  color: var(--foreground);
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply bg-background text-foreground antialiased;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(12, 149, 160, 0.25), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(41, 72, 110, 0.2), transparent 35%),
+    linear-gradient(160deg, rgba(10, 16, 28, 1), rgba(8, 11, 21, 1));
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 140, 170, 0.4);
+  border-radius: 999px;
 }
