@@ -9,3 +9,12 @@ services:
     env_file:
       - .env
     restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: semantic-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always
