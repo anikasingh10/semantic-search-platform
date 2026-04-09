@@ -128,3 +128,9 @@ npm run dev
 - Root directory: `frontend`
 - Build command: `npm run build`
 - Env var: `NEXT_PUBLIC_API_URL=<your-backend-url>/api/v1`
+
+## Running with Docker
+
+### Build and start containers
+```bash
+docker-compose up --build
